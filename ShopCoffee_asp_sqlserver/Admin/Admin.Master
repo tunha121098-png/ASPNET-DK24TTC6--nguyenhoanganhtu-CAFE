@@ -1,0 +1,41 @@
+<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Admin.master.cs" Inherits="ShopCoffee_asp_sqlserver.Admin.AdminMaster" %>
+
+<!DOCTYPE html>
+<html>
+<head runat="server">
+    <title>Coffee House Admin Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="../Content/Style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="admin-layout">
+            <aside class="sidebar">
+                <div class="logo" style="margin-bottom: 30px;">
+                    <h3><i class="fas fa-coffee"></i> ADMIN CP</h3>
+                </div>
+                <ul>
+                    <li><a href="Dashboard.aspx"><i class="fas fa-chart-line"></i> Dashboard</a></li>
+                    <li><a href="QLDanhMuc.aspx"><i class="fas fa-tags"></i> Quản lý Danh mục</a></li>
+                    <li><a href="QLMenu.aspx"><i class="fas fa-utensils"></i> Quản lý Menu</a></li>
+                    <li><a href="QLBan.aspx"><i class="fas fa-table"></i> Quản lý Bàn</a></li>
+                    <li><a href="QLDonHang.aspx"><i class="fas fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>
+                    <li><a href="QLDatBan.aspx"><i class="fas fa-calendar-check"></i> Quản lý Đặt bàn</a></li>
+                    <li><a href="QLTaiKhoan.aspx"><i class="fas fa-users"></i> Quản lý Tài khoản</a></li>
+                    <li style="margin-top: 40px;"><a href="../Default.aspx"><i class="fas fa-home"></i> Xem cửa hàng</a></li>
+                    <li><a href="../Logout.aspx"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+                </ul>
+            </aside>
+
+            <main class="main-content">
+                <asp:ContentPlaceHolder ID="AdminMainContent" runat="server">
+                </asp:ContentPlaceHolder>
+            </main>
+        </div>
+    </form>
+</body>
+</html>
