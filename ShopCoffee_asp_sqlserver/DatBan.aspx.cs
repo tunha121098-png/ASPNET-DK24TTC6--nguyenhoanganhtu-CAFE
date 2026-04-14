@@ -10,12 +10,6 @@ namespace ShopCoffee_asp_sqlserver
 {
     public partial class DatBan : System.Web.UI.Page
     {
-        protected global::System.Web.UI.WebControls.Repeater rptTables;
-        protected global::System.Web.UI.WebControls.DropDownList ddlTables;
-        protected global::System.Web.UI.WebControls.TextBox txtBookingTime;
-        protected global::System.Web.UI.WebControls.Button btnBook;
-        protected global::System.Web.UI.WebControls.Label lblMsg;
-
         KetNoi kn = new KetNoi();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -32,7 +26,6 @@ namespace ShopCoffee_asp_sqlserver
             rptTables.DataSource = dt;
             rptTables.DataBind();
 
-            // Load vào dropdown list các bàn trống
             DataTable dtFree = kn.GetTable("SELECT * FROM Tables WHERE Status = N'Trống'");
             ddlTables.DataSource = dtFree;
             ddlTables.DataTextField = "TableName";
@@ -45,7 +38,7 @@ namespace ShopCoffee_asp_sqlserver
         {
             if (Session["UserId"] == null)
             {
-                Response.Redirect("Login.aspx?msg=Vui lòng đăng nhập để đặt bàn!");
+                Response.Redirect("Login.aspx");
                 return;
             }
 

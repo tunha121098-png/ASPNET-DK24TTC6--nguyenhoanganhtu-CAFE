@@ -39,8 +39,25 @@
             </div>
         </div>
 
+        <!-- Hoạt động gần đây -->
+        <div style="margin-top: 30px;">
+            <div class="card">
+                <h3><i class="fas fa-shopping-basket"></i> Đơn hàng gần đây</h3>
+                <asp:GridView ID="gvRecentOrders" runat="server" CssClass="table" AutoGenerateColumns="false" EmptyDataText="Không có đơn hàng mới nào.">
+                    <Columns>
+                        <asp:BoundField DataField="FullName" HeaderText="Khách hàng" />
+                        <asp:BoundField DataField="TotalAmount" HeaderText="Giá trị" DataFormatString="{0:N0}" />
+                        <asp:BoundField DataField="Status" HeaderText="Trạng thái" />
+                    </Columns>
+                </asp:GridView>
+                <div style="margin-top: 15px; text-align: right;">
+                    <a href="QLDonHang.aspx" style="color: #6F4E37; text-decoration: none; font-size: 0.9rem;">Xem tất cả <i class="fas fa-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+
         <!-- Món bán chạy (Danh sách đơn giản) -->
-        <div class="card">
+        <div class="card" style="margin-top: 30px;">
             <h3><i class="fas fa-star"></i> Món bán chạy nhất</h3>
             <asp:GridView ID="gvBestSellers" runat="server" CssClass="table" AutoGenerateColumns="false">
                 <Columns>

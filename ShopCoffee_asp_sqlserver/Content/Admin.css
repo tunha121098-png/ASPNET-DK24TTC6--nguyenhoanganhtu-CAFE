@@ -1,0 +1,183 @@
+/* Admin Panel Styling */
+@import url('Variables.css');
+
+:root {
+    --sidebar-width: 280px;
+    --sidebar-bg: #2C1E12;
+    --admin-bg: #F8F4F0;
+}
+
+body {
+    background-color: var(--admin-bg);
+}
+
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--sidebar-bg);
+    color: var(--white);
+    padding: 30px 0;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
+    transition: var(--transition);
+}
+
+.sidebar .logo {
+    padding: 0 30px;
+    margin-bottom: 40px;
+}
+
+.sidebar .logo h3 {
+    font-size: 1.5rem;
+    color: var(--secondary);
+    letter-spacing: 1px;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar ul li {
+    padding: 2px 20px;
+}
+
+.sidebar ul li a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px 20px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.sidebar ul li a i {
+    font-size: 1.1rem;
+    width: 20px;
+}
+
+.sidebar ul li a:hover, .sidebar ul li.active a {
+    background: rgba(236, 177, 118, 0.1);
+    color: var(--secondary);
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    padding: 40px;
+}
+
+.main-content h2, .main-content h3 {
+    margin-bottom: 25px;
+    color: var(--primary-dark);
+}
+
+/* Dashboard Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.stat-box {
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: var(--transition);
+    border: 1px solid rgba(111, 78, 55, 0.1);
+}
+
+.stat-box:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--white), #FFF9F5);
+}
+
+.stat-box h4 {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-box .value {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1.2;
+}
+
+.stat-box p {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Admin Tables */
+.admin-table-container {
+    background: var(--white);
+    padding: 30px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+}
+
+.table th {
+    border-bottom: 2px solid var(--bg-body);
+    padding: 15px;
+    color: var(--text-muted);
+}
+
+.table td {
+    padding: 15px;
+    border-bottom: 1px solid var(--bg-body);
+}
+
+/* Form controls in Admin */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: var(--radius-sm);
+}
+
+/* Image preview in QLMenu */
+#imgPreview {
+    max-width: 150px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 10px;
+}
+
+/* Responsive Admin */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 80px;
+    }
+    .sidebar .logo h3, .sidebar ul li a span {
+        display: none;
+    }
+    .main-content {
+        margin-left: 80px;
+    }
+}

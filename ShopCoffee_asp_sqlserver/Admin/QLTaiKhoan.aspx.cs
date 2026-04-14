@@ -93,7 +93,15 @@ namespace ShopCoffee_asp_sqlserver.Admin
             string pass = txtPassword.Text.Trim();
             string role = ddlRole.SelectedValue;
 
-            string sql = $"UPDATE Users SET FullName=N'{fullName}', Username='{user}', Password='{pass}', Role='{role}' WHERE UserId={id}";
+            string sql = "";
+            if (string.IsNullOrEmpty(pass))
+            {
+                sql = $"UPDATE Users SET FullName=N'{fullName}', Username='{user}', Role='{role}' WHERE UserId={id}";
+            }
+            else
+            {
+                sql = $"UPDATE Users SET FullName=N'{fullName}', Username='{user}', Password='{pass}', Role='{role}' WHERE UserId={id}";
+            }
             kn.Execute(sql);
             lblMsg.Text = "Đã cập nhật thông tin!";
             ResetForm();

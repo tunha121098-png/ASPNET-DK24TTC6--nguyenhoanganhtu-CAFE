@@ -13,6 +13,7 @@
                 <Columns>
                     <asp:BoundField DataField="OrderId" HeaderText="ID" />
                     <asp:BoundField DataField="FullName" HeaderText="Khách hàng" />
+                    <asp:BoundField DataField="TableName" HeaderText="Vị trí bàn" />
                     <asp:BoundField DataField="OrderDate" HeaderText="Ngày đặt"
                         DataFormatString="{0:dd/MM/yyyy HH:mm}" />
                     <asp:BoundField DataField="TotalAmount" HeaderText="Tổng tiền" DataFormatString="{0:N0}" />

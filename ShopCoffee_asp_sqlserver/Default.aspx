@@ -31,7 +31,11 @@
                 <asp:Repeater ID="rptProducts" runat="server" OnItemCommand="rptProducts_ItemCommand">
                     <ItemTemplate>
                         <div class="product-card">
-                            <img src='<%# "https://via.placeholder.com/300x200?text=" + Eval("ProductName") %>'
+                            <img src='<%# 
+                                string.IsNullOrEmpty(Eval("ImageUrl").ToString()) ? "https://placehold.co/300x200?text=No+Image" : 
+                                (Eval("ImageUrl").ToString().StartsWith("http") ? Eval("ImageUrl") : 
+                                (Eval("ImageUrl").ToString().Contains("/") ? Eval("ImageUrl") : "Content/Images/" + Eval("ImageUrl"))) 
+                            %>'
                                 alt='<%# Eval("ProductName") %>' class="product-image">
                             <div class="product-info">
                                 <h3>
@@ -44,7 +48,7 @@
                                     <span class="product-price">
                                         <%# string.Format("{0:N0} VNĐ", Eval("Price")) %>
                                     </span>
-                                    <asp:LinkButton ID="btnAddCart" runat="server" CssClass="btn btn-primary"
+                                    <asp:LinkButton ID="btnAddCart" runat="server" CssClass="btn btn-primary btn-icon"
                                         CommandName="AddToCart" CommandArgument='<%# Eval("ProductId") %>'>
                                         <i class="fas fa-cart-plus"></i>
                                     </asp:LinkButton>

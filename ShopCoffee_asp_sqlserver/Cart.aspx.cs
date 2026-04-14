@@ -10,12 +10,6 @@ namespace ShopCoffee_asp_sqlserver
 {
     public partial class Cart : System.Web.UI.Page
     {
-        protected global::System.Web.UI.WebControls.GridView gvCart;
-        protected global::System.Web.UI.WebControls.Label lblTotal;
-        protected global::System.Web.UI.WebControls.Label lblMsg;
-        protected global::System.Web.UI.WebControls.Button btnBack;
-        protected global::System.Web.UI.WebControls.Button btnOrder;
-
         KetNoi kn = new KetNoi();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -23,6 +17,24 @@ namespace ShopCoffee_asp_sqlserver
             if (!IsPostBack)
             {
                 LoadCart();
+                LoadTables();
+            }
+        }
+
+        void LoadTables()
+        {
+            DataTable dt = kn.GetTable("SELECT * FROM Tables");
+            rptTables.DataSource = dt;
+            rptTables.DataBind();
+        }
+
+        protected void rptTables_ItemCommand(object source, RepeaterCommandEventArgs e)
+        {
+            if (e.CommandName == "SelectTable")
+            {
+                ViewState["SelectedTableId"] = e.CommandArgument;
+                hfSelectedTableId.Value = e.CommandArgument.ToString();
+                LoadTables();
             }
         }
 
@@ -36,9 +48,7 @@ namespace ShopCoffee_asp_sqlserver
 
                 decimal total = 0;
                 foreach (DataRow row in dt.Rows)
-                {
                     total += Convert.ToDecimal(row["Total"]);
-                }
                 lblTotal.Text = total.ToString("N0");
             }
             else
@@ -53,56 +63,94 @@ namespace ShopCoffee_asp_sqlserver
         {
             if (Session["UserId"] == null)
             {
-                Response.Redirect("Login.aspx?msg=Vui lòng đăng nhập để đặt món!");
+                Response.Redirect("Login.aspx");
                 return;
             }
 
             if (Session["Cart"] == null || ((DataTable)Session["Cart"]).Rows.Count == 0)
             {
-                lblMsg.Text = "Giỏ hàng của bạn đang trống!";
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Giỏ hàng trống!', 'Vui lòng chọn món trước khi đặt hàng.', 'warning');", true);
+                return;
+            }
+
+            string phone = txtPhone.Text.Trim().Replace("'", "''");
+            string tableId = hfSelectedTableId.Value;
+
+            if (phone == "" || tableId == "")
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "Swal.fire('Thiếu thông tin!', 'Vui lòng nhập số điện thoại và chọn vị trí bàn.', 'error');", true);
                 return;
             }
 
             DataTable dtCart = (DataTable)Session["Cart"];
             int userId = Convert.ToInt32(Session["UserId"]);
-            decimal total = Convert.ToDecimal(lblTotal.Text.Replace(",", ""));
+            decimal total = 0;
+            foreach (DataRow row in dtCart.Rows) total += Convert.ToDecimal(row["Total"]);
+            string sqlTotal = total.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-            // 1. Tạo đơn hàng mới (Table Orders)
-            string insertOrder = $"INSERT INTO Orders (UserId, TotalAmount, Status) OUTPUT INSERTED.OrderId VALUES ({userId}, {total}, N'Chờ xác nhận')";
-            int orderId = Convert.ToInt32(kn.GetValue(insertOrder));
-
-            // 2. Thêm chi tiết đơn hàng (Table OrderDetails)
-            foreach (DataRow row in dtCart.Rows)
+            try
             {
-                int pId = Convert.ToInt32(row["ProductId"]);
-                int qty = Convert.ToInt32(row["Quantity"]);
-                decimal price = Convert.ToDecimal(row["Price"]);
-                string insertDetail = $"INSERT INTO OrderDetails (OrderId, ProductId, Quantity, Price) VALUES ({orderId}, {pId}, {qty}, {price})";
-                kn.Execute(insertDetail);
-            }
+                string insertOrder = $"INSERT INTO Orders (UserId, TotalAmount, Status, Phone, TableId) OUTPUT INSERTED.OrderId VALUES ({userId}, {sqlTotal}, N'Chờ xác nhận', '{phone}', {tableId})";
+                int orderId = Convert.ToInt32(kn.GetValue(insertOrder));
 
-            // Xóa giỏ hàng
+                kn.Execute($"UPDATE Tables SET Status = N'Đang có khách' WHERE TableId = {tableId}");
+
+                foreach (DataRow row in dtCart.Rows)
+                {
+                    int pId = Convert.ToInt32(row["ProductId"]);
+                    int qty = Convert.ToInt32(row["Quantity"]);
+                    decimal price = Convert.ToDecimal(row["Price"]);
+                    kn.Execute($"INSERT INTO OrderDetails (OrderId, ProductId, Quantity, Price) VALUES ({orderId}, {pId}, {qty}, {price.ToString(System.Globalization.CultureInfo.InvariantCulture)})");
+                }
+
+                Session["Cart"] = null;
+                txtPhone.Text = "";
+                hfSelectedTableId.Value = "";
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"showOrderSuccess({orderId});", true);
+                LoadCart();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"Swal.fire('Lỗi', '{ex.Message.Replace("'", "\"")}', 'error');", true);
+            }
+        }
+
+        protected void btnClear_Click(object sender, EventArgs e)
+        {
             Session["Cart"] = null;
-            lblMsg.Text = "Đặt món thành công! Mã đơn hàng: #" + orderId;
             LoadCart();
         }
 
         protected void gvCart_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            if (e.CommandName == "RemoveProduct")
+            DataTable dt = (DataTable)Session["Cart"];
+            int pId = Convert.ToInt32(e.CommandArgument);
+
+            for (int i = 0; i < dt.Rows.Count; i++)
             {
-                int pId = Convert.ToInt32(e.CommandArgument);
-                DataTable dt = (DataTable)Session["Cart"];
-                for (int i = dt.Rows.Count - 1; i >= 0; i--)
+                if (Convert.ToInt32(dt.Rows[i]["ProductId"]) == pId)
                 {
-                    if (Convert.ToInt32(dt.Rows[i]["ProductId"]) == pId)
+                    if (e.CommandName == "RemoveProduct") dt.Rows.RemoveAt(i);
+                    else if (e.CommandName == "Increase")
                     {
-                        dt.Rows.RemoveAt(i);
+                        dt.Rows[i]["Quantity"] = Convert.ToInt32(dt.Rows[i]["Quantity"]) + 1;
+                        dt.Rows[i]["Total"] = Convert.ToInt32(dt.Rows[i]["Quantity"]) * Convert.ToDecimal(dt.Rows[i]["Price"]);
                     }
+                    else if (e.CommandName == "Decrease")
+                    {
+                        int currentQty = Convert.ToInt32(dt.Rows[i]["Quantity"]);
+                        if (currentQty > 1)
+                        {
+                            dt.Rows[i]["Quantity"] = currentQty - 1;
+                            dt.Rows[i]["Total"] = (currentQty - 1) * Convert.ToDecimal(dt.Rows[i]["Price"]);
+                        }
+                        else dt.Rows.RemoveAt(i);
+                    }
+                    break;
                 }
-                Session["Cart"] = dt;
-                LoadCart();
             }
+            Session["Cart"] = dt;
+            LoadCart();
         }
     }
 }

@@ -7,12 +7,16 @@
         <h2><i class="fas fa-table"></i> Quản lý Bàn</h2>
 
         <div class="card" style="margin-bottom: 30px;">
-            <h3>Thêm bàn mới</h3>
+            <h3 id="hFormTitle" runat="server">Thêm bàn mới</h3>
             <div style="display: flex; gap: 20px; margin-top: 15px;">
                 <asp:TextBox ID="txtTableName" runat="server" CssClass="form-control"
                     placeholder="Tên bàn (vd: Bàn 10)"></asp:TextBox>
                 <asp:Button ID="btnAddTable" runat="server" Text="Thêm bàn" CssClass="btn btn-primary"
                     OnClick="btnAddTable_Click" />
+                <asp:Button ID="btnUpdateTable" runat="server" Text="Cập nhật" CssClass="btn btn-primary"
+                    Visible="false" OnClick="btnUpdateTable_Click" />
+                <asp:Button ID="btnCancelEdit" runat="server" Text="Hủy" CssClass="btn"
+                    Visible="false" OnClick="btnCancelEdit_Click" />
             </div>
         </div>
 
@@ -32,9 +36,12 @@
                     </asp:TemplateField>
                     <asp:TemplateField HeaderText="Thao tác">
                         <ItemTemplate>
+                            <asp:LinkButton ID="btnEdit" runat="server" CommandName="SuaTable"
+                                CommandArgument='<%# Eval("TableId") %>' CssClass="btn"
+                                style="font-size: 0.8rem; background: #ddd; color: #333; margin-right: 5px;"><i class="fas fa-edit"></i> Sửa</asp:LinkButton>
                             <asp:LinkButton ID="btnToggle" runat="server" CommandName="ToggleStatus"
                                 CommandArgument='<%# Eval("TableId") %>' CssClass="btn"
-                                style="font-size: 0.8rem; background: #eee;">Đổi trạng thái</asp:LinkButton>
+                                style="font-size: 0.8rem; background: #eee;">Trạng thái</asp:LinkButton>
                             <asp:LinkButton ID="btnDel" runat="server" CommandName="XoaTable"
                                 CommandArgument='<%# Eval("TableId") %>' OnClientClick="return confirm('Xóa bàn này?')"
                                 style="margin-left: 10px; color: red;"><i class="fas fa-trash"></i></asp:LinkButton>

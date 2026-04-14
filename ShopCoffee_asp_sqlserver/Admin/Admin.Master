@@ -6,13 +6,14 @@
     <title>Coffee House Admin Dashboard</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="../Content/Style.css" rel="stylesheet" />
+    <link href="../Content/Variables.css" rel="stylesheet" />
+    <link href="../Content/Admin.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
-    <form id="form1" runat="server">
+    <form id="form1" runat="server" enctype="multipart/form-data">
         <div class="admin-layout">
             <aside class="sidebar">
                 <div class="logo" style="margin-bottom: 30px;">
@@ -24,7 +25,6 @@
                     <li><a href="QLMenu.aspx"><i class="fas fa-utensils"></i> Quản lý Menu</a></li>
                     <li><a href="QLBan.aspx"><i class="fas fa-table"></i> Quản lý Bàn</a></li>
                     <li><a href="QLDonHang.aspx"><i class="fas fa-shopping-cart"></i> Quản lý Đơn hàng</a></li>
-                    <li><a href="QLDatBan.aspx"><i class="fas fa-calendar-check"></i> Quản lý Đặt bàn</a></li>
                     <li><a href="QLTaiKhoan.aspx"><i class="fas fa-users"></i> Quản lý Tài khoản</a></li>
                     <li style="margin-top: 40px;"><a href="../Default.aspx"><i class="fas fa-home"></i> Xem cửa hàng</a></li>
                     <li><a href="../Logout.aspx"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>

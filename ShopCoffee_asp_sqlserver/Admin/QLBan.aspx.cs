@@ -11,7 +11,10 @@ namespace ShopCoffee_asp_sqlserver.Admin
     public partial class QLBan : System.Web.UI.Page
     {
         protected global::System.Web.UI.WebControls.TextBox txtTableName;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hFormTitle;
         protected global::System.Web.UI.WebControls.Button btnAddTable;
+        protected global::System.Web.UI.WebControls.Button btnUpdateTable;
+        protected global::System.Web.UI.WebControls.Button btnCancelEdit;
         protected global::System.Web.UI.WebControls.GridView gvTables;
 
         KetNoi kn = new KetNoi();
@@ -37,8 +40,35 @@ namespace ShopCoffee_asp_sqlserver.Admin
 
             string sql = $"INSERT INTO Tables (TableName, Status) VALUES (N'{name}', N'Trống')";
             kn.Execute(sql);
-            txtTableName.Text = "";
+            ResetForm();
             LoadGrid();
+        }
+
+        protected void btnUpdateTable_Click(object sender, EventArgs e)
+        {
+            if (ViewState["EditTableId"] == null) return;
+            int id = (int)ViewState["EditTableId"];
+            string name = txtTableName.Text.Trim();
+            if (name == "") return;
+
+            kn.Execute($"UPDATE Tables SET TableName=N'{name}' WHERE TableId={id}");
+            ResetForm();
+            LoadGrid();
+        }
+
+        protected void btnCancelEdit_Click(object sender, EventArgs e)
+        {
+            ResetForm();
+        }
+
+        void ResetForm()
+        {
+            txtTableName.Text = "";
+            hFormTitle.InnerText = "Thêm bàn mới";
+            btnAddTable.Visible = true;
+            btnUpdateTable.Visible = false;
+            btnCancelEdit.Visible = false;
+            ViewState["EditTableId"] = null;
         }
 
         protected void gvTables_RowCommand(object sender, GridViewCommandEventArgs e)
@@ -48,6 +78,19 @@ namespace ShopCoffee_asp_sqlserver.Admin
             {
                 kn.Execute($"DELETE FROM Tables WHERE TableId={id}");
                 LoadGrid();
+            }
+            else if (e.CommandName == "SuaTable")
+            {
+                DataTable dt = kn.GetTable($"SELECT * FROM Tables WHERE TableId={id}");
+                if (dt.Rows.Count > 0)
+                {
+                    txtTableName.Text = dt.Rows[0]["TableName"].ToString();
+                    hFormTitle.InnerText = "Sửa tên bàn";
+                    btnAddTable.Visible = false;
+                    btnUpdateTable.Visible = true;
+                    btnCancelEdit.Visible = true;
+                    ViewState["EditTableId"] = id;
+                }
             }
             else if (e.CommandName == "ToggleStatus")
             {

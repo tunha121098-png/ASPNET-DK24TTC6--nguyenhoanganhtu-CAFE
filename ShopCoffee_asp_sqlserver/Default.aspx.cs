@@ -10,11 +10,6 @@ namespace ShopCoffee_asp_sqlserver
 {
     public partial class Default : System.Web.UI.Page
     {
-        protected global::System.Web.UI.WebControls.DropDownList ddlCategory;
-        protected global::System.Web.UI.WebControls.TextBox txtSearch;
-        protected global::System.Web.UI.WebControls.Button btnSearch;
-        protected global::System.Web.UI.WebControls.Repeater rptProducts;
-
         KetNoi kn = new KetNoi();
 
         protected void Page_Load(object sender, EventArgs e)
@@ -67,7 +62,6 @@ namespace ShopCoffee_asp_sqlserver
 
         void AddToCart(int productId)
         {
-            // Cấu trúc giỏ hàng trong Session: DataTable
             DataTable dtCart;
             if (Session["Cart"] == null)
             {
@@ -77,13 +71,13 @@ namespace ShopCoffee_asp_sqlserver
                 dtCart.Columns.Add("Price", typeof(decimal));
                 dtCart.Columns.Add("Quantity", typeof(int));
                 dtCart.Columns.Add("Total", typeof(decimal));
+                dtCart.Columns.Add("ImageUrl", typeof(string));
             }
             else
             {
                 dtCart = (DataTable)Session["Cart"];
             }
 
-            // Kiểm tra món đã có trong giỏ chưa
             bool exists = false;
             foreach (DataRow row in dtCart.Rows)
             {
@@ -98,7 +92,7 @@ namespace ShopCoffee_asp_sqlserver
 
             if (!exists)
             {
-                DataTable dtProd = kn.GetTable($"SELECT ProductId, ProductName, Price FROM Products WHERE ProductId={productId}");
+                DataTable dtProd = kn.GetTable($"SELECT ProductId, ProductName, Price, ImageUrl FROM Products WHERE ProductId={productId}");
                 if (dtProd.Rows.Count > 0)
                 {
                     DataRow newRow = dtCart.NewRow();
@@ -107,12 +101,14 @@ namespace ShopCoffee_asp_sqlserver
                     newRow["Price"] = dtProd.Rows[0]["Price"];
                     newRow["Quantity"] = 1;
                     newRow["Total"] = dtProd.Rows[0]["Price"];
+                    newRow["ImageUrl"] = dtProd.Rows[0]["ImageUrl"];
                     dtCart.Rows.Add(newRow);
                 }
             }
 
             Session["Cart"] = dtCart;
-            Response.Write("<script>alert('Đã thêm vào giỏ hàng!');</script>");
+            string script = "Swal.fire({ icon: 'success', title: 'Đã thêm vào giỏ!', text: 'Sản phẩm đã có trong giỏ hàng của bạn.', showConfirmButton: false, timer: 1500, toast: true, position: 'top-end' });";
+            ClientScript.RegisterStartupScript(this.GetType(), "alert", script, true);
         }
     }
 }

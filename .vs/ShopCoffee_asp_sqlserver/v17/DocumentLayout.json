@@ -1,12 +1,37 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "D:\\SourceItSuDung\\ShopCoffee_asp_sqlserver\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{1DE74E93-F678-40E0-BAF6-2E040FCF802D}|ShopCoffee_asp_sqlserver\\ShopCoffee_asp_sqlserver.csproj|d:\\sourceitsudung\\shopcoffee_asp_sqlserver\\shopcoffee_asp_sqlserver\\userprofile.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1DE74E93-F678-40E0-BAF6-2E040FCF802D}|ShopCoffee_asp_sqlserver\\ShopCoffee_asp_sqlserver.csproj|solutionrelative:shopcoffee_asp_sqlserver\\userprofile.aspx.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "UserProfile.aspx.cs",
+              "DocumentMoniker": "D:\\SourceItSuDung\\ShopCoffee_asp_sqlserver\\ShopCoffee_asp_sqlserver\\UserProfile.aspx.cs",
+              "RelativeDocumentMoniker": "ShopCoffee_asp_sqlserver\\UserProfile.aspx.cs",
+              "ToolTip": "D:\\SourceItSuDung\\ShopCoffee_asp_sqlserver\\ShopCoffee_asp_sqlserver\\UserProfile.aspx.cs",
+              "RelativeToolTip": "ShopCoffee_asp_sqlserver\\UserProfile.aspx.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAzwC4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-10T08:49:47.345Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

@@ -1,4 +1,6 @@
 <%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.Master.cs" Inherits="ShopCoffee_asp_sqlserver.Site" %>
+<%@ Register TagPrefix="uc" TagName="Header" Src="~/UserControls/Header.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Footer" Src="~/UserControls/Footer.ascx" %>
 
 <!DOCTYPE html>
 <html>
@@ -6,51 +8,25 @@
     <title>Shop Coffee - Thưởng thức từng giọt</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="Content/Variables.css" rel="stylesheet" />
     <link href="Content/Style.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>
 </head>
 <body>
     <form id="form1" runat="server">
-        <header>
-            <div class="logo">
-                <h1><i class="fas fa-mug-hot"></i> COFFEE HOUSE</h1>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="Default.aspx">Trang chủ</a></li>
-                    <li><a href="DatBan.aspx">Đặt bàn</a></li>
-                    <li><a href="Cart.aspx">Giỏ hàng</a></li>
-                    <% if (Session["Username"] == null) { %>
-                        <li><a href="Login.aspx">Đăng nhập</a></li>
-                    <% } else { %>
-                        <li><a href="Profile.aspx">Hồ sơ</a></li>
-                        <li><a href="Logout.aspx">Chào, <%= Session["FullName"] ?? Session["Username"] %> (Thoát)</a></li>
-                        <% if (Session["Role"]?.ToString() == "Admin") { %>
-                            <li><a href="Admin/Dashboard.aspx" style="color: #ECB176;">[Admin]</a></li>
-                        <% } %>
-                    <% } %>
-                </ul>
-            </nav>
-        </header>
+        <uc:Header runat="server" ID="HeaderControl" />
+
 
         <div class="main-body">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
             </asp:ContentPlaceHolder>
         </div>
 
-        <footer>
-            <div class="container">
-                <p>&copy; 2026 Shop Coffee House. All Rights Reserved.</p>
-                <p>Địa chỉ: 123 Đường Cà Phê, TP. Hồ Chí Minh</p>
-                <div class="social-icons" style="margin-top: 10px;">
-                    <i class="fab fa-facebook"></i>
-                    <i class="fab fa-instagram"></i>
-                    <i class="fab fa-tiktok"></i>
-                </div>
-            </div>
-        </footer>
+        <uc:Footer runat="server" ID="FooterControl" />
+
     </form>
 </body>
 </html>

@@ -18,9 +18,8 @@
                     <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control"></asp:TextBox>
                 </div>
                 <div class="form-group">
-                    <label>Mật khẩu</label>
-                    <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password">
-                    </asp:TextBox>
+                    <label>Mật khẩu (Để trống để giữ nguyên khi sửa)</label>
+                    <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" TextMode="Password"></asp:TextBox>
                 </div>
                 <div class="form-group">
                     <label>Vai trò (Role)</label>

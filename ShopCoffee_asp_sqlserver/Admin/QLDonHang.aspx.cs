@@ -10,25 +10,20 @@ namespace ShopCoffee_asp_sqlserver.Admin
 {
     public partial class QLDonHang : System.Web.UI.Page
     {
-        protected global::System.Web.UI.WebControls.GridView gvOrders;
-        protected global::System.Web.UI.WebControls.Label lblOrderId;
-        protected global::System.Web.UI.WebControls.GridView gvDetails;
-        protected global::System.Web.UI.WebControls.Panel pnlDetails;
-        protected global::System.Web.UI.WebControls.Button btnCloseDetails;
-
         KetNoi kn = new KetNoi();
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
-            {
-                LoadGrid();
-            }
+            if (!IsPostBack) LoadGrid();
         }
 
         void LoadGrid()
         {
-            string sql = "SELECT o.*, u.FullName FROM Orders o JOIN Users u ON o.UserId = u.UserId ORDER BY o.OrderDate DESC";
+            string sql = @"SELECT o.*, u.FullName, t.TableName 
+                          FROM Orders o 
+                          JOIN Users u ON o.UserId = u.UserId 
+                          LEFT JOIN Tables t ON o.TableId = t.TableId
+                          ORDER BY o.OrderDate DESC";
             gvOrders.DataSource = kn.GetTable(sql);
             gvOrders.DataBind();
         }
@@ -56,10 +51,7 @@ namespace ShopCoffee_asp_sqlserver.Admin
             else if (e.CommandName == "XemChiTiet")
             {
                 lblOrderId.Text = orderId.ToString();
-                string sqlDet = $@"SELECT d.*, p.ProductName, (d.Quantity * d.Price) as Total 
-                                   FROM OrderDetails d 
-                                   JOIN Products p ON d.ProductId = p.ProductId 
-                                   WHERE d.OrderId = {orderId}";
+                string sqlDet = $"SELECT d.*, p.ProductName, (d.Quantity * d.Price) as Total FROM OrderDetails d JOIN Products p ON d.ProductId = p.ProductId WHERE d.OrderId = {orderId}";
                 gvDetails.DataSource = kn.GetTable(sqlDet);
                 gvDetails.DataBind();
                 pnlDetails.Visible = true;
@@ -68,6 +60,12 @@ namespace ShopCoffee_asp_sqlserver.Admin
             if (nextStatus != "")
             {
                 kn.Execute($"UPDATE Orders SET Status = N'{nextStatus}' WHERE OrderId = {orderId}");
+                if (nextStatus == "Hoàn thành" || nextStatus == "Đã hủy")
+                {
+                    DataTable dt = kn.GetTable($"SELECT TableId FROM Orders WHERE OrderId = {orderId}");
+                    if (dt.Rows.Count > 0 && dt.Rows[0]["TableId"] != DBNull.Value)
+                        kn.Execute($"UPDATE Tables SET Status = N'Trống' WHERE TableId = {Convert.ToInt32(dt.Rows[0]["TableId"])}");
+                }
                 LoadGrid();
             }
         }

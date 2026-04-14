@@ -14,6 +14,7 @@ namespace ShopCoffee_asp_sqlserver.Admin
         protected global::System.Web.UI.WebControls.Label lblOrderCount;
         protected global::System.Web.UI.WebControls.Label lblFreeTables;
         protected global::System.Web.UI.WebControls.Label lblUserCount;
+        protected global::System.Web.UI.WebControls.GridView gvRecentOrders;
         protected global::System.Web.UI.WebControls.GridView gvBestSellers;
 
         KetNoi kn = new KetNoi();
@@ -40,6 +41,15 @@ namespace ShopCoffee_asp_sqlserver.Admin
 
             // Số người dùng
             lblUserCount.Text = kn.GetValue("SELECT COUNT(*) FROM Users WHERE Role='User'").ToString();
+
+            // Đơn hàng gần đây
+            string sqlOrders = @"SELECT TOP 5 o.TotalAmount, o.Status, u.FullName 
+                                 FROM Orders o JOIN Users u ON o.UserId = u.UserId 
+                                 ORDER BY o.OrderDate DESC";
+            gvRecentOrders.DataSource = kn.GetTable(sqlOrders);
+            gvRecentOrders.DataBind();
+
+
 
             // Món bán chạy
             string sqlBest = @"SELECT TOP 5 p.ProductName, c.CategoryName, SUM(od.Quantity) as TotalSold 

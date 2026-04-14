@@ -19,13 +19,35 @@
                 </div>
                 <div class="form-group">
                     <label>Giá bán (VNĐ)</label>
-                    <asp:TextBox ID="txtPrice" runat="server" CssClass="form-control" TextMode="Number"></asp:TextBox>
+                    <asp:TextBox ID="txtPrice" runat="server" CssClass="form-control" placeholder="Ví dụ: 25000"></asp:TextBox>
                 </div>
                 <div class="form-group">
                     <label>Mô tả</label>
                     <asp:TextBox ID="txtDesc" runat="server" CssClass="form-control"></asp:TextBox>
                 </div>
+                <div class="form-group" style="grid-column: span 2;">
+                    <label>Hình ảnh sản phẩm <small style="color:#999;">(Dán link ảnh từ Google hoặc bất kỳ URL nào)</small></label>
+                    <div style="display: flex; align-items: center; gap: 20px;">
+                        <asp:TextBox ID="txtImageUrl" runat="server" CssClass="form-control" style="flex: 1;"
+                            placeholder="https://example.com/image.jpg"
+                            onkeyup="previewUrl(this.value)" onpaste="setTimeout(()=>previewUrl(this.value),100)"></asp:TextBox>
+                        <asp:Image ID="imgPreview" runat="server" ClientIDMode="Static"
+                            Width="80" Height="80" ImageUrl="https://placehold.co/80x80?text=No+Image"
+                            style="border-radius: 8px; border: 1px solid #ddd; object-fit: cover;" />
+                    </div>
+                </div>
             </div>
+
+            <script type="text/javascript">
+                function previewUrl(url) {
+                    var img = document.getElementById('imgPreview');
+                    if (url && url.trim() !== '') {
+                        img.src = url.trim();
+                    } else {
+                        img.src = 'https://placehold.co/80x80?text=No+Image';
+                    }
+                }
+            </script>
             <div style="margin-top: 10px;">
                 <asp:Button ID="btnAdd" runat="server" Text="Thêm món" CssClass="btn btn-primary"
                     OnClick="btnAdd_Click" />
@@ -45,6 +67,16 @@
                 <Columns>
                     <asp:BoundField DataField="ProductId" HeaderText="ID" />
                     <asp:BoundField DataField="ProductName" HeaderText="Tên món" />
+                    <asp:TemplateField HeaderText="Hình">
+                        <ItemTemplate>
+                            <img src='<%# 
+                                string.IsNullOrEmpty(Eval("ImageUrl").ToString()) ? "https://placehold.co/80x80?text=No+Image" : 
+                                (Eval("ImageUrl").ToString().StartsWith("http") ? Eval("ImageUrl") : 
+                                (Eval("ImageUrl").ToString().Contains("/") ? "../" + Eval("ImageUrl") : "../Content/Images/" + Eval("ImageUrl"))) 
+                            %>' 
+                                 width="50" height="50" style="border-radius: 5px; object-fit: cover; border: 1px solid #eee;" />
+                        </ItemTemplate>
+                    </asp:TemplateField>
                     <asp:BoundField DataField="CategoryName" HeaderText="Danh mục" />
                     <asp:BoundField DataField="Price" HeaderText="Giá" DataFormatString="{0:N0}" />
                     <asp:TemplateField HeaderText="Thao tác">

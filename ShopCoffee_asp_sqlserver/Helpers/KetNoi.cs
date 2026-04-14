@@ -21,10 +21,17 @@ namespace ShopCoffee_asp_sqlserver
         public DataTable GetTable(string sql)
         {
             SqlConnection con = GetConnection();
-            SqlDataAdapter ad = new SqlDataAdapter(sql, con);
-            DataTable dt = new DataTable();
-            ad.Fill(dt);
-            return dt;
+            try
+            {
+                SqlDataAdapter ad = new SqlDataAdapter(sql, con);
+                DataTable dt = new DataTable();
+                ad.Fill(dt);
+                return dt;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi truy vấn dữ liệu: " + ex.Message);
+            }
         }
 
         // Thực thi lệnh (INSERT, UPDATE, DELETE)
@@ -32,9 +39,19 @@ namespace ShopCoffee_asp_sqlserver
         {
             SqlConnection con = GetConnection();
             SqlCommand cmd = new SqlCommand(sql, con);
-            con.Open();
-            cmd.ExecuteNonQuery();
-            con.Close();
+            try
+            {
+                con.Open();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi thực thi SQL: " + ex.Message + " [Query: " + sql + "]");
+            }
+            finally
+            {
+                if (con.State == ConnectionState.Open) con.Close();
+            }
         }
 
         // Lấy giá trị đơn lẻ (Scalar)
@@ -42,10 +59,20 @@ namespace ShopCoffee_asp_sqlserver
         {
             SqlConnection con = GetConnection();
             SqlCommand cmd = new SqlCommand(sql, con);
-            con.Open();
-            object value = cmd.ExecuteScalar();
-            con.Close();
-            return value;
+            try
+            {
+                con.Open();
+                object value = cmd.ExecuteScalar();
+                return value;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Lỗi lấy giá trị: " + ex.Message);
+            }
+            finally
+            {
+                if (con.State == ConnectionState.Open) con.Close();
+            }
         }
     }
 }
