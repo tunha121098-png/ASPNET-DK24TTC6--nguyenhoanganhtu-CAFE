@@ -26,9 +26,9 @@
 
             <div class="footer-col contact">
                 <h4>Thông tin liên hệ</h4>
-                <p><i class="fas fa-map-marker-alt"></i> 123 Đường Cà Phê, Quận 1, TP. Hồ Chí Minh</p>
-                <p><i class="fas fa-phone"></i> +84 123 456 789</p>
-                <p><i class="fas fa-envelope"></i> contact@coffeehouse.com</p>
+                <p><i class="fas fa-map-marker-alt"></i> 443 QL28, Ma Lâm, Hàm Thuận, Bình Thuận</p>
+                <p><i class="fas fa-phone"></i> 0866 532 073</p>
+                <p><i class="fas fa-envelope"></i> beatrem102@gmail.com</p>
             </div>
 
             <div class="footer-col hours">
